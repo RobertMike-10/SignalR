@@ -2,9 +2,14 @@
 var connectionUserCount = new signalR.HubConnectionBuilder().withUrl("/hubs/userCount").build();
 
 //recibing data from Hub
-connectionUserCount.on("updateTotalViews", (value) => {
-    console.log("New data:" + value);
+connectionUserCount.on("updateTotalViews", (value) => {    
     var newCountSpan = document.getElementById("totalViewsCounter");
+    newCountSpan.innerHTML = value;
+});
+
+connectionUserCount.on("updateTotalUsers", (value) => {
+    console.log("New user:" + value);
+    var newCountSpan = document.getElementById("totalUsersCounter");
     newCountSpan.innerHTML = value;
 });
 
