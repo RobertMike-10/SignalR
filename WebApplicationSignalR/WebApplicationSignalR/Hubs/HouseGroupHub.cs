@@ -16,5 +16,16 @@ namespace WebApplicationSignalR.Hubs
             }
 
         }
+
+        public async Task LeaveHouse(string house)
+        {
+            var key = Context.ConnectionId + ":" + house;
+            if (GroupsJoined.Contains(key))
+            {
+                GroupsJoined.Remove(key);
+                await Groups.RemoveFromGroupAsync(Context.ConnectionId, house);
+            }
+
+        }
     }
 }
