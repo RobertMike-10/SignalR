@@ -6,6 +6,10 @@ namespace WebApplicationSignalR.Hubs
     {
         public static List<string> GroupsJoined { get; set; } = new();
 
+        public async Task TriggerHouseNotification(string houseName)
+        {
+            await Clients.Group(houseName).SendAsync("triggerHouseNotification", houseName);
+        }
         public async Task JoinHouse(string house)
         {
             var key = Context.ConnectionId + ":" + house;

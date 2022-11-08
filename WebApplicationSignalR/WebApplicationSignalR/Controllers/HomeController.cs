@@ -22,7 +22,7 @@ namespace WebApplicationSignalR.Controllers
             return View();
         }
 
-        public IActionResult Privacy()
+        public IActionResult Notification()
         {
             return View();
         }
