@@ -27,6 +27,17 @@ namespace WebApplicationSignalR.Controllers
             return View();
         }
 
+        public IActionResult DeathlyHallow()
+        {
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult HarryPotterHouse()
+        {
+            return View();
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
