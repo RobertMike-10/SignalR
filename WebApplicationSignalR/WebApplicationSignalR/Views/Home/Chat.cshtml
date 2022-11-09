@@ -1,4 +1,4 @@
-﻿@model WebApplicationSignalR.Models.ViewModel.ChatVM
+﻿@model WebApplicationSignalR.Models.ViewModels.ChatVM
 
  <input type="hidden" id="hdUserId" value="@Model.UserId" />
 
@@ -73,3 +73,6 @@
         </div>
     </div>
  </div>
+
+ <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="~/js/basicChat.js"></script>
