@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using WebApplicationSignalR.Data;
 using WebApplicationSignalR.Hubs;
 using WebApplicationSignalR.Models;
 
@@ -10,11 +12,13 @@ namespace WebApplicationSignalR.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHubContext<DeathlyHallowSub> _deathlyHub;
+        private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger, IHubContext<DeathlyHallowSub> deathlyHub)
+        public HomeController(ILogger<HomeController> logger, IHubContext<DeathlyHallowSub> deathlyHub, ApplicationDbContext db)
         {
             _logger = logger;
             _deathlyHub = deathlyHub;
+            _db = db;
         }
 
         public IActionResult Index()
@@ -61,5 +65,49 @@ namespace WebApplicationSignalR.Controllers
             return Accepted();
 
         }
+
+
+        [ActionName("Order")]
+        public async Task<IActionResult> Order()
+        {
+            string[] name = { "Mike", "Esmeralda", "Peter", "Yaneth", "Roni" };
+            string[] itemName = { "Spagetti", "Lasgnia", "Pizza", "Chicken", "Salad" };
+
+            Random rand = new Random();
+            // Generate a random index less than the size of the array.  
+            int index = rand.Next(name.Length);
+
+            Order order = new Order()
+            {
+                Name = name[index],
+                ItemName = itemName[index],
+                Count = index
+            };
+
+            return View(order);
+        }
+
+        [ActionName("Order")]
+        [HttpPost]
+        public async Task<IActionResult> OrderPost(Order order)
+        {
+
+            _db.Orders.Add(order);
+            await _db.SaveChangesAsync();
+            await _orderHub.Clients.All.SendAsync("newOrder");
+            return RedirectToAction(nameof(Order));
+        }
+        [ActionName("OrderList")]
+        public async Task<IActionResult> OrderList()
+        {
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetAllOrder()
+        {
+            var productList = await _db.Orders.ToListAsync();
+            return Json(new { data = productList });
+        }
+
     }
 }
