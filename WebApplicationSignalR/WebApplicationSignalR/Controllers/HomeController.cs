@@ -38,6 +38,10 @@ namespace WebApplicationSignalR.Controllers
             return View();
         }
 
+        public IActionResult BasicChat()
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {
