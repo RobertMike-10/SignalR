@@ -12,12 +12,17 @@ namespace WebApplicationSignalR.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly IHubContext<DeathlyHallowSub> _deathlyHub;
+        private readonly IHubContext<OrderHub> _orderHub;
         private readonly ApplicationDbContext _db;
 
-        public HomeController(ILogger<HomeController> logger, IHubContext<DeathlyHallowSub> deathlyHub, ApplicationDbContext db)
+        public HomeController(ILogger<HomeController> logger, 
+            IHubContext<DeathlyHallowSub> deathlyHub,
+            IHubContext<OrderHub> orderHub,
+            ApplicationDbContext db)
         {
             _logger = logger;
             _deathlyHub = deathlyHub;
+            _orderHub = orderHub;
             _db = db;
         }
 
