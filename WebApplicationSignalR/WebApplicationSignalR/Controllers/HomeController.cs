@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
+using System.Security.Claims;
 using WebApplicationSignalR.Data;
 using WebApplicationSignalR.Hubs;
 using WebApplicationSignalR.Models;
+using WebApplicationSignalR.Models.ViewModels;
 
 namespace WebApplicationSignalR.Controllers
 {
@@ -52,8 +55,17 @@ namespace WebApplicationSignalR.Controllers
             return View();
         }
 
-        public IActionResult Chat()
+        [Authorize]
+        public async Task<IActionResult> Chat()
         {
+            var UserId = User.FindFirstValue(ClaimTypes.NameIdentifier);
+            ChatVM chatVM = new()
+            {
+                Rooms = await _db.ChatRooms.ToListAsync()!,
+                MaxRoomAllowed = 5,
+                UserId = UserId
+
+            };
             return View();
         }
 

@@ -1,6 +1,9 @@
-﻿namespace WebApplicationSignalR.Hubs
+﻿using Microsoft.AspNetCore.SignalR;
+
+namespace WebApplicationSignalR.Hubs
 {
-    public class ChatHub
+    public class ChatHub: Hub
     {
+
     }
 }
