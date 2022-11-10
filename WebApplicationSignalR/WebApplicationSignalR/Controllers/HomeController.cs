@@ -66,7 +66,7 @@ namespace WebApplicationSignalR.Controllers
                 UserId = UserId
 
             };
-            return View();
+            return View(chatVM);
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

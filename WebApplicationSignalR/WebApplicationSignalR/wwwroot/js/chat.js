@@ -4,8 +4,15 @@
     .build();
 
 connectionChat.on("ReceiveUserConnected", (userId, userName, isOldConnection) => {
+    console.log("Connected:" + username);
     if (!isOldConnection)
       addMessage(`${userName} is online`);
+});
+
+connectionChat.on("ReceiveUserDisconnected", (userId, userName, userHasConnection) => {
+    console.log("DisConnected:" + username);
+    if (!userHasConnection)
+        addMessage(`${userName} is offline`);
 });
 
 

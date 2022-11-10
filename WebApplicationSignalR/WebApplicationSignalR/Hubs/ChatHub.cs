@@ -27,5 +27,29 @@ namespace WebApplicationSignalR.Hubs
 
             return base.OnConnectedAsync();
         }
+
+        public override Task OnDisconnectedAsync(Exception? exception)
+        {
+            var UserId = Context!.User!.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (HubConnections.HasUserConnection(UserId, Context.ConnectionId))
+            {
+                var connections = HubConnections.Users[Context.ConnectionId];
+                connections.Remove(Context.ConnectionId);
+                if(connections.Any())
+                {
+                    //make the replace with the new list with one less
+                    HubConnections.Users.Add(UserId, connections);
+                }
+            }
+            if (!string.IsNullOrEmpty(UserId))
+            {
+                var userName = _db.Users.FirstOrDefault(u => u.Id == UserId)!.UserName;
+                Clients.Users(HubConnections.OnlineUsers()).SendAsync("ReceiveUserDisconnected", UserId,
+                              userName, HubConnections.HasUser(UserId));
+            }
+
+            return base.OnDisconnectedAsync(exception);
+        }
     }
 }
