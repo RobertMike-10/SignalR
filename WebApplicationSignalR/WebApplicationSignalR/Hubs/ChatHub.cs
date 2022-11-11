@@ -19,7 +19,7 @@ namespace WebApplicationSignalR.Hubs
             if (!string.IsNullOrEmpty(UserId))
             {
                 var userName =  _db.Users.FirstOrDefault(u => u.Id == UserId)!.UserName;
-                Clients.Users(HubConnections.OnlineUsers()).SendAsync("ReceiveUserConnected", UserId, 
+                Clients.Others.SendAsync("ReceiveUserConnected", UserId, 
                               userName,HubConnections.HasUser(UserId));
                 HubConnections.AddUserConnection(UserId, Context.ConnectionId);
 
@@ -34,9 +34,10 @@ namespace WebApplicationSignalR.Hubs
 
             if (HubConnections.HasUserConnection(UserId, Context.ConnectionId))
             {
-                var connections = HubConnections.Users[Context.ConnectionId];
+                var connections = HubConnections.Users[UserId];
                 connections.Remove(Context.ConnectionId);
-                if(connections.Any())
+                HubConnections.Users.Remove(UserId);
+                if (connections.Any())
                 {
                     //make the replace with the new list with one less
                     HubConnections.Users.Add(UserId, connections);
@@ -45,7 +46,7 @@ namespace WebApplicationSignalR.Hubs
             if (!string.IsNullOrEmpty(UserId))
             {
                 var userName = _db.Users.FirstOrDefault(u => u.Id == UserId)!.UserName;
-                Clients.Users(HubConnections.OnlineUsers()).SendAsync("ReceiveUserDisconnected", UserId,
+                Clients.Others.SendAsync("ReceiveUserDisconnected", UserId,
                               userName, HubConnections.HasUser(UserId));
             }
 

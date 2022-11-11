@@ -1,15 +1,15 @@
 ﻿var connectionChat = new signalR.HubConnectionBuilder()
     .withUrl("/hubs/chat")
-    .withAutomaticReconnect([0,1000,5000,10000,null])
+    //.withAutomaticReconnect([20000, 40000, null])
     .build();
-
-connectionChat.on("ReceiveUserConnected", (userId, userName, isOldConnection) => {
+connectionChat.serverTimeoutInMilliseconds = 200000;
+connectionChat.on("ReceiveUserConnected", function (userId, userName, isOldConnection) {
     console.log("Connected:" + username);
     if (!isOldConnection)
       addMessage(`${userName} is online`);
 });
 
-connectionChat.on("ReceiveUserDisconnected", (userId, userName, userHasConnection) => {
+connectionChat.on("ReceiveUserDisconnected", function (userId, userName, userHasConnection) {
     console.log("DisConnected:" + username);
     if (!userHasConnection)
         addMessage(`${userName} is offline`);
